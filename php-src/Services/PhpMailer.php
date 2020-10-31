@@ -10,7 +10,7 @@ use PHPMailer\PHPMailer as Mailer;
  * Class PhpMailer
  * Make and send each mail via PHPMailer - base for creating mails
  */
-abstract class PhpMailer implements Interfaces\Sending
+abstract class PhpMailer implements Interfaces\ISending
 {
     const IS_HTML = true;
     const WORD_WRAP = 50;
@@ -27,14 +27,14 @@ abstract class PhpMailer implements Interfaces\Sending
     /**
      * Send mail directly via php - just use classical PHPMailer
      *
-     * @param Interfaces\Content $content
-     * @param Interfaces\EmailUser $to
-     * @param Interfaces\EmailUser $from
-     * @param Interfaces\EmailUser $replyTo
+     * @param Interfaces\IContent $content
+     * @param Interfaces\IEmailUser $to
+     * @param Interfaces\IEmailUser $from
+     * @param Interfaces\IEmailUser $replyTo
      * @param bool $toDisabled
      * @return Basics\Result
      */
-    public function sendEmail(Interfaces\Content $content, Interfaces\EmailUser $to, ?Interfaces\EmailUser $from = null, ?Interfaces\EmailUser $replyTo = null, $toDisabled = false): Basics\Result
+    public function sendEmail(Interfaces\IContent $content, Interfaces\IEmailUser $to, ?Interfaces\IEmailUser $from = null, ?Interfaces\IEmailUser $replyTo = null, $toDisabled = false): Basics\Result
     {
         try {
             //Recipients
@@ -57,11 +57,11 @@ abstract class PhpMailer implements Interfaces\Sending
     }
 
     /**
-     * @param Interfaces\EmailUser|null $from
+     * @param Interfaces\IEmailUser|null $from
      * @return $this
      * @throws Mailer\Exception
      */
-    protected function addSenders(?Interfaces\EmailUser $from = null)
+    protected function addSenders(?Interfaces\IEmailUser $from = null)
     {
         if ($from) {
             $this->mailer->setFrom($from->getEmail(), $from->getEmailName());
@@ -69,7 +69,7 @@ abstract class PhpMailer implements Interfaces\Sending
         return $this;
     }
 
-    protected function setContent(Interfaces\Content $content)
+    protected function setContent(Interfaces\IContent $content)
     {
         $this->mailer->Subject = $content->getSubject();
         $this->mailer->Body = $content->getHtmlBody();
@@ -81,7 +81,7 @@ abstract class PhpMailer implements Interfaces\Sending
     }
 
     /**
-     * @param Interfaces\EmailUser[] $to
+     * @param Interfaces\IEmailUser[] $to
      * @return $this
      * @throws Mailer\Exception
      */
@@ -94,11 +94,11 @@ abstract class PhpMailer implements Interfaces\Sending
     }
 
     /**
-     * @param Interfaces\EmailUser|null $replyTo
+     * @param Interfaces\IEmailUser|null $replyTo
      * @return $this
      * @throws Mailer\Exception
      */
-    protected function addReply(?Interfaces\EmailUser $replyTo = null)
+    protected function addReply(?Interfaces\IEmailUser $replyTo = null)
     {
         if (!empty($replyTo)) {
             $this->mailer->addReplyTo($replyTo->getEmail(), $replyTo->getEmailName());
@@ -107,14 +107,14 @@ abstract class PhpMailer implements Interfaces\Sending
     }
 
     /**
-     * @param Interfaces\Content $content
+     * @param Interfaces\IContent $content
      * @return $this
      * @throws Mailer\Exception
      */
-    protected function addAttachments(Interfaces\Content $content)
+    protected function addAttachments(Interfaces\IContent $content)
     {
         foreach ($content->getAttachments() as $attachment) {
-            if (Interfaces\ContentAttachment::TYPE_IMAGE == $attachment->getType()) {
+            if (Interfaces\IContentAttachment::TYPE_IMAGE == $attachment->getType()) {
                 $this->mailer->addEmbeddedImage(
                     $attachment->getLocalPath(),
                     $attachment->getFileContent(), // Content ID is inside the content here
@@ -122,7 +122,7 @@ abstract class PhpMailer implements Interfaces\Sending
                     $attachment->getEncoding(),
                     $attachment->getFileMime()
                 );
-            } elseif (Interfaces\ContentAttachment::TYPE_FILE == $attachment->getType()) {
+            } elseif (Interfaces\IContentAttachment::TYPE_FILE == $attachment->getType()) {
                 $this->mailer->addAttachment(
                     $attachment->getLocalPath(),
                     $attachment->getFileName(),
@@ -141,7 +141,7 @@ abstract class PhpMailer implements Interfaces\Sending
         return $this;
     }
 
-    protected function addUnsubscribe(Interfaces\Content $content)
+    protected function addUnsubscribe(Interfaces\IContent $content)
     {
         $unSubscribeLink = $content->getUnsubscribeLink();
         $unSubscribeEmail = $content->getUnsubscribeEmail();

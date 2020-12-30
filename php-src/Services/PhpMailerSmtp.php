@@ -1,8 +1,10 @@
 <?php
 
-namespace EmailPhpMailer\Services;
+namespace kalanis\EmailPhpMailer\Services;
+
 
 use PHPMailer\PHPMailer as Mailer;
+
 
 /**
  * Class PhpMailerSmtp

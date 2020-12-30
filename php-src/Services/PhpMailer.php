@@ -1,10 +1,12 @@
 <?php
 
-namespace EmailPhpMailer\Services;
+namespace kalanis\EmailPhpMailer\Services;
 
-use EmailApi\Interfaces;
-use EmailApi\Basics;
+
+use kalanis\EmailApi\Interfaces;
+use kalanis\EmailApi\Basics;
 use PHPMailer\PHPMailer as Mailer;
+
 
 /**
  * Class PhpMailer

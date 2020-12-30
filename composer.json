@@ -1,17 +1,20 @@
 {
     "name": "alex-kalanis/email-php-mailer",
     "description": "Basic mailer in PHP for everyday use",
-    "keywords": [],
-    "license": "BSD 3-Clause",
-    "type": "project",
+    "keywords": [
+        "email",
+        "phpmailer"
+    ],
+    "license": "BSD-3-Clause",
+    "type": "library",
     "require": {
-        "php": ">=7.1.0",
-        "phpmailer/phpmailer": "~6.1",
-        "alex-kalanis/email-api": "dev-master"
+        "php": ">=7.2.0",
+        "phpmailer/phpmailer": ">=6.1",
+        "alex-kalanis/email-api": "1.0"
     },
     "autoload": {
         "psr-4": {
-            "EmailPhpMailer\\": "php-src/"
+            "kalanis\\EmailPhpMailer\\": "php-src/"
         }
     },
     "scripts": {

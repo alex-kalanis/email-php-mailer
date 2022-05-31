@@ -9,7 +9,7 @@ Contains libraries for sending emails via PHPMailer - set it yourself
 ```
 {
     "require": {
-        "alex-kalanis/email-php-mailer": "dev-master"
+        "alex-kalanis/email-php-mailer": "1.0"
     }
 }
 ```

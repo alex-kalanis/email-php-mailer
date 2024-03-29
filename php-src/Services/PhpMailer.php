@@ -70,11 +70,11 @@ abstract class PhpMailer implements Interfaces\ISending
         return $this;
     }
 
-    protected function setContent(Interfaces\IContent $content)
+    protected function setContent(Interfaces\IContent $content): self
     {
         $this->mailer->Subject = $content->getSubject();
         $this->mailer->Body = $content->getHtmlBody();
-        $this->mailer->AltBody = $content->getPlainBody();
+        $this->mailer->AltBody = strval($content->getPlainBody());
         $this->mailer->WordWrap = static::WORD_WRAP;
         $this->mailer->CharSet = static::CHARACTER_SET;
         $this->mailer->isHTML(static::IS_HTML);
@@ -89,7 +89,7 @@ abstract class PhpMailer implements Interfaces\ISending
     protected function addTargets(array $to)
     {
         foreach ($to as $item) {
-            $this->mailer->addAddress($item->getEmail(), $item->getName());
+            $this->mailer->addAddress($item->getEmail(), $item->getEmailName());
         }
         return $this;
     }
@@ -151,13 +151,13 @@ abstract class PhpMailer implements Interfaces\ISending
     {
         $unSubscribeLink = $content->getUnsubscribeLink();
         $unSubscribeEmail = $content->getUnsubscribeEmail();
-        if (!(empty($unSubscribeLink) || empty($unSubscribeEmail))) {
-            if ($unSubscribeLink && $unSubscribeEmail) {
+        if ((!empty($unSubscribeLink)) || (!empty($unSubscribeEmail))) {
+            if ((!empty($unSubscribeLink)) && (!empty($unSubscribeEmail))) {
                 if ($content->canUnsubscribeOneClick()) {
                     $this->mailer->addCustomHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
                 }
                 $this->mailer->addCustomHeader('List-Unsubscribe', '<' . $unSubscribeLink . '>, <' . $unSubscribeEmail . '>');
-            } elseif ($unSubscribeLink) {
+            } elseif (!empty($unSubscribeLink)) {
                 if ($content->canUnsubscribeOneClick()) {
                     $this->mailer->addCustomHeader('List-Unsubscribe-Post', 'List-Unsubscribe=One-Click');
                 }

@@ -14,17 +14,19 @@ class PhpMailerSmtp extends PhpMailer
 {
     public function __construct(string $host = 'localhost', int $port = 25, string $user = '', string $secret = '', string $sender = '')
     {
-        $this->mailer = new Mailer\PHPMailer(true);
-        $this->mailer->Sender = $sender;
+        $mailer = new Mailer\PHPMailer(true);
+        $mailer->Sender = $sender;
         // Server settings
-        $this->mailer->SMTPDebug = Mailer\SMTP::DEBUG_OFF;                 // Enable verbose debug output
-        $this->mailer->isSMTP();                                           // Send using SMTP
-        $this->mailer->Host       = $host;                                 // Set the SMTP server to send through
-        $this->mailer->Port       = $port;                                 // TCP port to connect to
-        $this->mailer->SMTPAuth   = true;                                  // Enable SMTP authentication
-        $this->mailer->Username   = $user;                                 // SMTP username
-        $this->mailer->Password   = $secret;                               // SMTP password
-        $this->mailer->SMTPSecure = Mailer\PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+        $mailer->SMTPDebug = Mailer\SMTP::DEBUG_OFF;                 // Enable verbose debug output
+        $mailer->isSMTP();                                           // Send using SMTP
+        $mailer->Host       = $host;                                 // Set the SMTP server to send through
+        $mailer->Port       = $port;                                 // TCP port to connect to
+        $mailer->SMTPAuth   = true;                                  // Enable SMTP authentication
+        $mailer->Username   = $user;                                 // SMTP username
+        $mailer->Password   = $secret;                               // SMTP password
+        $mailer->SMTPSecure = Mailer\PHPMailer::ENCRYPTION_STARTTLS; // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
+
+        parent::__construct($mailer);
     }
 
     public function systemServiceId(): int

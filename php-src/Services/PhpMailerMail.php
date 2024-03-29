@@ -14,9 +14,11 @@ class PhpMailerMail extends PhpMailer
 {
     public function __construct()
     {
-        $this->mailer = new Mailer\PHPMailer(true);
+        $mailer = new Mailer\PHPMailer(true);
         // Server settings
-        $this->mailer->isMail(); // Send using simple Mail
+        $mailer->isMail(); // Send using simple Mail
+
+        parent::__construct($mailer);
     }
 
     public function systemServiceId(): int

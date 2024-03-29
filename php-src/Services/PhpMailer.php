@@ -14,12 +14,16 @@ use PHPMailer\PHPMailer as Mailer;
  */
 abstract class PhpMailer implements Interfaces\ISending
 {
-    const IS_HTML = true;
-    const WORD_WRAP = 50;
-    const CHARACTER_SET = "utf-8";
+    protected const IS_HTML = true;
+    protected const WORD_WRAP = 50;
+    protected const CHARACTER_SET = "utf-8";
 
-    /** @var Mailer\PHPMailer|null */
-    protected $mailer = null;
+    protected Mailer\PHPMailer $mailer;
+
+    public function __construct(Mailer\PHPMailer $mailer)
+    {
+        $this->mailer = $mailer;
+    }
 
     public function canUseService(): bool
     {
@@ -47,21 +51,16 @@ abstract class PhpMailer implements Interfaces\ISending
                 ->addAttachments($content)
                 ->send();
 
-            return new Basics\Result(true, [
-                'message' => 'Message has been sent'
-            ]);
+            return new Basics\Result(true, 'Message has been sent');
         } catch (Mailer\Exception $e) {
-            return new Basics\Result(false, [
-                'message' => $e->getMessage(),
-                'info' => $this->mailer->ErrorInfo,
-            ]);
+            return new Basics\Result(false, $e->getMessage() . "\r\n\r\n" . $this->mailer->ErrorInfo);
         }
     }
 
     /**
      * @param Interfaces\IEmailUser|null $from
-     * @return $this
      * @throws Mailer\Exception
+     * @return $this
      */
     protected function addSenders(?Interfaces\IEmailUser $from = null)
     {
@@ -84,8 +83,8 @@ abstract class PhpMailer implements Interfaces\ISending
 
     /**
      * @param Interfaces\IEmailUser[] $to
-     * @return $this
      * @throws Mailer\Exception
+     * @return $this
      */
     protected function addTargets(array $to)
     {
@@ -97,8 +96,8 @@ abstract class PhpMailer implements Interfaces\ISending
 
     /**
      * @param Interfaces\IEmailUser|null $replyTo
-     * @return $this
      * @throws Mailer\Exception
+     * @return $this
      */
     protected function addReply(?Interfaces\IEmailUser $replyTo = null)
     {
@@ -110,8 +109,8 @@ abstract class PhpMailer implements Interfaces\ISending
 
     /**
      * @param Interfaces\IContent $content
-     * @return $this
      * @throws Mailer\Exception
+     * @return $this
      */
     protected function addAttachments(Interfaces\IContent $content)
     {
@@ -143,6 +142,11 @@ abstract class PhpMailer implements Interfaces\ISending
         return $this;
     }
 
+    /**
+     * @param Interfaces\IContent $content
+     * @throws Mailer\Exception
+     * @return $this
+     */
     protected function addUnsubscribe(Interfaces\IContent $content)
     {
         $unSubscribeLink = $content->getUnsubscribeLink();
@@ -166,8 +170,8 @@ abstract class PhpMailer implements Interfaces\ISending
     }
 
     /**
-     * @return $this
      * @throws Mailer\Exception
+     * @return $this
      */
     protected function send()
     {
